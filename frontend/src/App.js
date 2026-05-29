@@ -1,69 +1,43 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function App() {
+
   const [file, setFile] = useState(null);
+  const [message, setMessage] = useState("");
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("http://localhost:8081/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.text();
+    setMessage(data);
+  };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(to right, #b77add, #70b6e6)",
-        fontFamily: "Arial",
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          padding: "40px",
-          borderRadius: "15px",
-          width: "400px",
-          textAlign: "center",
-          boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
-        }}
-      >
-        <h1 style={{ color: "#333" }}>AI Resume Analyzer 🚀</h1>
+    <div style={{ textAlign: "center", marginTop: "100px" }}>
 
-        <p style={{ color: "gray", marginBottom: "25px" }}>
-          Upload your resume and get instant AI-based analysis
-        </p>
+      <h1>AI Resume Analyzer 🚀</h1>
 
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{ marginBottom: "20px" }}
-        />
+      <input type="file" onChange={handleFileChange} />
 
-        <br />
+      <br /><br />
 
-        <button
-          style={{
-            backgroundColor: "#68b2f3",
-            color: "white",
-            border: "none",
-            padding: "12px 25px",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
-        >
-          Upload Resume
-        </button>
+      <button onClick={uploadFile}>
+        Upload Resume
+      </button>
 
-        {file && (
-          <div style={{ marginTop: "20px" }}>
-            <p>
-              📄 <b>{file.name}</b>
-            </p>
+      <h3>{message}</h3>
 
-            <p style={{ color: "green" }}>
-              Ready for analysis ✅
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
