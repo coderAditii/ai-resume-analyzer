@@ -1,15 +1,35 @@
 package com.aditi.backend;
 
+import java.io.IOException;
+
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin("*")
 public class HomeController {
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
+    public String uploadResume(@RequestParam("file") MultipartFile file) {
 
-        return "File received: " + file.getOriginalFilename();
+        try {
+
+            PDDocument document = Loader.loadPDF(file.getBytes());
+
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+
+            String text = pdfStripper.getText(document);
+
+            document.close();
+
+            return "Skills Found: " + SkillExtractor.extractSkills(text);
+
+        } catch (IOException e) {
+            return "Error reading PDF";
+        }
     }
 }
