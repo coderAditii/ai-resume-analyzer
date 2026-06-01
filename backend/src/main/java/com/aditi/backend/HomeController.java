@@ -26,7 +26,11 @@ public class HomeController {
 
             document.close();
 
-            return "Skills Found: " + SkillExtractor.extractSkills(text);
+            var skills = SkillExtractor.extractSkills(text);
+
+            int score = ATSScorer.calculateScore(skills);
+
+            return "Skills Found: " + skills + "\nATS Score: " + score + "/100";
 
         } catch (IOException e) {
             return "Error reading PDF";
