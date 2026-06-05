@@ -29,8 +29,11 @@ public class HomeController {
             var skills = SkillExtractor.extractSkills(text);
 
             int score = ATSScorer.calculateScore(skills);
+            var missing = ATSScorer.missingSkills(skills);
+            var suggestions = SuggestionGenerator.generateSuggestions(missing);
 
-            return "Skills Found: " + skills + "\nATS Score: " + score + "/100";
+
+            return "Skills Found: " + skills + "\nMissing Skills: " + missing + "\nSuggestions: " + suggestions +  "\nATS Score: " + score + "/100";
 
         } catch (IOException e) {
             return "Error reading PDF";

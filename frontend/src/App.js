@@ -6,6 +6,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
   const [skills, setSkills] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -31,15 +32,31 @@ function App() {
       setScore(scoreMatch[1]);
     }
 
-    const skillMatch = data.match(/\[(.*?)\]/);
+   
 
-    if (skillMatch) {
-      const extractedSkills = skillMatch[1]
-        .split(",")
-        .map(skill => skill.trim());
+    const matches = data.match(/\[(.*?)\]/g);
 
-      setSkills(extractedSkills);
+    if (matches) {
+
+    const extractedSkills = matches[0]
+    .replace("[", "")
+    .replace("]", "")
+    .split(",")
+    .map(skill => skill.trim());
+
+    setSkills(extractedSkills);
+
+    if (matches[2]) {
+
+    const extractedSuggestions = matches[2]
+      .replace("[", "")
+      .replace("]", "")
+      .split(",")
+      .map(item => item.trim());
+
+    setSuggestions(extractedSuggestions);
     }
+  }
   };
 
   return (
@@ -118,8 +135,16 @@ function App() {
       </div>
 
       <br />
+      <div>
 
-      <h3>{message}</h3>
+  <h2>Suggestions 💡</h2>
+
+  {suggestions.map((item, index) => (
+    <p key={index}>{item}</p>
+  ))}
+
+</div>
+
 
     </div>
   );
