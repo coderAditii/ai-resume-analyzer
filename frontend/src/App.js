@@ -1,9 +1,10 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
 
   const [file, setFile] = useState(null);
-  const [message, setMessage] = useState("");
+  //const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
   const [skills, setSkills] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
@@ -24,7 +25,7 @@ function App() {
 
     const data = await response.text();
 
-    setMessage(data);
+    //setMessage(data);
 
     const scoreMatch = data.match(/ATS Score: (\d+)/);
 
@@ -59,95 +60,70 @@ function App() {
   }
   };
 
-  return (
-    <div
-      style={{
-        textAlign: "center",
-        marginTop: "50px",
-        fontFamily: "Arial",
-      }}
-    >
+ return (
+  <div className="container">
 
-      <h1>AI Resume Analyzer 🚀</h1>
+    <div className="card">
 
-      <input type="file" onChange={handleFileChange} />
+      <h1 className="title">
+        AI Resume Analyzer 🚀
+      </h1>
 
-      <br /><br />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        className="file-input"
+      />
+
+      <br />
 
       <button
         onClick={uploadFile}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-          borderRadius: "10px",
-        }}
+        className="upload-btn"
       >
         Upload Resume
       </button>
 
-      <br /><br />
+      <div className="progress-bar">
 
-      <div
-        style={{
-          width: "300px",
-          height: "30px",
-          backgroundColor: "#ddd",
-          margin: "auto",
-          borderRadius: "20px",
-          overflow: "hidden",
-        }}
-      >
         <div
-          style={{
-            width: `${score}%`,
-            height: "100%",
-            backgroundColor: "green",
-            textAlign: "center",
-            color: "white",
-            lineHeight: "30px",
-            transition: "1s",
-          }}
+          className="progress"
+          style={{ width: `${score}%` }}
         >
           {score}%
         </div>
+
       </div>
 
-      <br />
+      <div className="skills-container">
 
-      <div>
         {skills.map((skill, index) => (
+
           <span
             key={index}
-            style={{
-              display: "inline-block",
-              backgroundColor: "#007bff",
-              color: "white",
-              padding: "10px 15px",
-              margin: "5px",
-              borderRadius: "20px",
-              fontSize: "14px",
-            }}
+            className="skill-badge"
           >
             {skill.toUpperCase()}
           </span>
+
         ))}
+
       </div>
 
-      <br />
-      <div>
+      <div className="suggestions">
 
-  <h2>Suggestions 💡</h2>
+        <h2>Suggestions 💡</h2>
 
-  {suggestions.map((item, index) => (
-    <p key={index}>{item}</p>
-  ))}
+        {suggestions.map((item, index) => (
+          <p key={index}>{item}</p>
+        ))}
 
-</div>
-
+      </div>
 
     </div>
-  );
+
+  </div>
+);
 }
 
 export default App;
