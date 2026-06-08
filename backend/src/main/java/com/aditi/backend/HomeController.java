@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class HomeController {
 
     @PostMapping("/upload")
-    public String uploadResume(@RequestParam("file") MultipartFile file) {
+    public ResumeResponse uploadResume(@RequestParam("file") MultipartFile file) {
 
         try {
 
@@ -33,10 +33,19 @@ public class HomeController {
             var suggestions = SuggestionGenerator.generateSuggestions(missing);
 
 
-            return "Skills Found: " + skills + "\nMissing Skills: " + missing + "\nSuggestions: " + suggestions +  "\nATS Score: " + score + "/100";
-
+            return new ResumeResponse(
+        skills,
+        score,
+        suggestions,
+        text
+);
         } catch (IOException e) {
-            return "Error reading PDF";
+            return new ResumeResponse(
+        null,
+        0,
+        null,
+        "Error reading PDF"
+);
         }
     }
 }
