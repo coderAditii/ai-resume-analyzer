@@ -12,6 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin("*")
 public class HomeController {
+    private final GeminiService geminiService;
+
+    public HomeController(GeminiService geminiService) {
+    this.geminiService = geminiService;
+}
 
     @PostMapping("/upload")
     public ResumeResponse uploadResume(@RequestParam("file") MultipartFile file) {
@@ -25,6 +30,7 @@ public class HomeController {
             String text = pdfStripper.getText(document);
 
             document.close();
+            geminiService.generateSuggestions(text);
 
             var skills = SkillExtractor.extractSkills(text);
 
